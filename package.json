@@ -1,0 +1,14 @@
+{
+  "name": "firefox-github-notifications",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A Firefox extension that shows GitHub notifications in the toolbar.",
+  "scripts": {
+    "start": "web-ext run",
+    "lint": "web-ext lint",
+    "build": "web-ext build"
+  },
+  "devDependencies": {
+    "web-ext": "^8.3.0"
+  }
+}
