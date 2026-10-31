@@ -12,10 +12,13 @@
   "permissions": [
     "storage",
     "alarms",
-    "notifications"
+    "notifications",
+    "tabs",
+    "cookies",
+    "contextualIdentities"
   ],
 
-  "host_permissions": [],
+  "host_permissions": ["*://github.com/*"],
 
   "background": {
     "scripts": ["src/background.js"],

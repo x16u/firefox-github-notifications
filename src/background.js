@@ -1,4 +1,4 @@
-import { getSettings, getValue } from "./lib/storage.js";
+import { getSettings, getValue, setValue } from "./lib/storage.js";
 import { showNotification, onNotificationClicked } from "./lib/notifications.js";
 import { fetchNewNotifications, handleNotificationClick, markAsSeen } from "./main.js";
 
@@ -19,7 +19,13 @@ async function pollAndNotify() {
     const seen = await getValue("seenIds", []);
 
     for (const item of items) {
-        if (seen.includes(item.id)) continue;
+//        if (seen.includes(item.id)) continue;
+
+        let pullURL = item.url.replace("api.github.com/repos", "github.com")
+            .replace("/pulls/", "/pull/")
+            .replace("/issues/", "/issues/");
+
+        await setValue(`notification:${item.id}:url`, pullURL);
 
         await showNotification({
             id: item.id,

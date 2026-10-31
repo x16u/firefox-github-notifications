@@ -22,8 +22,15 @@ export async function fetchNewNotifications(settings) {
 }
 
 export async function handleNotificationClick(notificationId) {
+    console.log(getValue(`notification:${notificationId}:title`));
     const url = await getValue(`notification:${notificationId}:url`);
-    if (url) await browser.tabs.create({ url });
+
+    // wir brauchen die cookie id, sonst 404...
+    const githubBrowserTabs = await browser.tabs.query({ url: "https://github.com/*" });
+    if (url) await browser.tabs.create({
+        url: url,
+        cookieStoreId: githubBrowserTabs[0]?.cookieStoreId,
+    });
 }
 
 export async function markAsSeen(id) {
