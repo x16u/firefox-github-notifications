@@ -1,4 +1,4 @@
-import { getSettings } from "./lib/storage.js";
+import { getSettings, getValue } from "./lib/storage.js";
 import { showNotification, onNotificationClicked } from "./lib/notifications.js";
 import { fetchNewNotifications, handleNotificationClick, markAsSeen } from "./main.js";
 
