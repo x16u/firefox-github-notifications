@@ -1,7 +1,7 @@
 import { getValue, setValue, getSettings } from "./lib/storage.js";
 
 export async function fetchNewNotifications(settings) {
-    const response = await fetch("https://api.github.com/notifications?all=true", { // all=true only for testing
+    const response = await fetch("https://api.github.com/notifications?all=false", { // all=true only for testing
         headers: {
             'X-GitHub-Api-Version': '2026-03-10',
             'Authorization': `Bearer ${settings.githubAccesToken}`,
@@ -35,6 +35,6 @@ export async function markAsSeen(id) {
 }
 
 export function isNew(item) {
-    return true;
+    return item.unread;
 }
 
