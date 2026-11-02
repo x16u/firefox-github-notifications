@@ -19,7 +19,7 @@ async function pollAndNotify() {
     const seen = await getValue("seenIds", []);
 
     for (const item of items) {
-//        if (seen.includes(item.id)) continue;
+        if (seen.includes(item.id)) continue;
 
         let pullURL = item.url.replace("api.github.com/repos", "github.com")
             .replace("/pulls/", "/pull/")
