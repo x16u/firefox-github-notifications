@@ -28,3 +28,4 @@ Then set your GitHub Access Token and poll interval in the add-on's options page
 
 - No official release yet / not published on the Firefox Add-on store
 - The token is currently stored unencrypted in the extension's local storage (`browser.storage.local`) — it stays on your device and is not synced or uploaded anywhere, but it is not protected against other local access
+- This Add-on is only in german yet. Translations will be comming soon
