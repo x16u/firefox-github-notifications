@@ -1,6 +1,6 @@
 import { getSettings, getValue, setValue } from "./lib/storage.js";
 import { showNotification, onNotificationClicked } from "./lib/notifications.js";
-import { fetchNewNotifications, handleNotificationClick, markAsSeen } from "./main.js";
+import { fetchNewNotifications, handleNotificationClick, markAsSeen, markAsPopedUp } from "./main.js";
 
 const ALARM_NAME = "poll-notifications";
 
@@ -17,15 +17,20 @@ async function pollAndNotify() {
 
     const items = await fetchNewNotifications(settings);
     const seen = await getValue("seenIds", []);
+    const popedUp = await getValue("popedUpIds", []);
 
     for (const item of items) {
-        if (seen.includes(item.id)) continue;
+        if (seen.includes(item.id) || popedUp.includes(item.id)) continue;
 
-        let pullURL = item.url.replace("api.github.com/repos", "github.com")
+        let url = item.url.replace("api.github.com/repos", "github.com")
             .replace("/pulls/", "/pull/")
             .replace("/issues/", "/issues/");
 
-        await setValue(`notification:${item.id}:url`, pullURL);
+        await setValue(`notification:${item.id}`, {
+            title: item.title,
+            message: item.message,
+            url: url,
+        });
 
         await showNotification({
             id: item.id,
@@ -33,7 +38,7 @@ async function pollAndNotify() {
             message: item.message,
         });
 
-        await markAsSeen(item.id);
+        await markAsPopedUp(item.id);
     }
 }
 
@@ -57,8 +62,11 @@ browser.storage.onChanged.addListener((changes, area) => {
     }
 });
 
-onNotificationClicked((notificationId) => {
-    handleNotificationClick(notificationId);
+onNotificationClicked(async (notificationId) => {
+    await Promise.all([
+        markAsSeen(notificationId),
+        handleNotificationClick(notificationId),
+    ]);
 });
 
 browser.runtime.onMessage.addListener((message) => {

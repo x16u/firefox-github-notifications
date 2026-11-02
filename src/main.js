@@ -17,18 +17,15 @@ export async function fetchNewNotifications(settings) {
             message: item.repository.full_name,
             url: item.subject.url,
         }));
-
-    return [];
 }
 
 export async function handleNotificationClick(notificationId) {
-    console.log(getValue(`notification:${notificationId}:title`));
-    const url = await getValue(`notification:${notificationId}:url`);
+    const notification = await getValue(`notification:${notificationId}`);
 
     // wir brauchen die cookie id, sonst 404...
     const githubBrowserTabs = await browser.tabs.query({ url: "https://github.com/*" });
     if (url) await browser.tabs.create({
-        url: url,
+        url: notification.url,
         cookieStoreId: githubBrowserTabs[0]?.cookieStoreId,
     });
 }
@@ -38,6 +35,14 @@ export async function markAsSeen(id) {
     if (!seen.includes(id)) {
         seen.push(id);
         await setValue("seenIds", seen);
+    }
+}
+
+export async function markAsPopedUp(id) {
+    const popedUp = (await getValue("popedUpIds", []));
+    if (!popedUp.includes(id)) {
+        popedUp.push(id);
+        await setValue("popedUpIds", popedUp);
     }
 }
 
