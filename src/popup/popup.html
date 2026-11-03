@@ -5,7 +5,8 @@
   <title>GitHub Notifications</title>
   <style>
     body { font: 14px sans-serif; width: 420px; padding: 10px; }
-    button { width: 100%; padding: 6px; cursor: pointer; }
+    button { width: 100%; padding: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; }
+    button img { width: 16px; height: 16px; }
     h1,h2 { color: #555; }
     h1 { font-size: 18px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; }
     h1 img { width: 20px; height: 20px; }
@@ -18,7 +19,7 @@
 </head>
 <body>
   <h1>GitHub Notifications <img src="../../icons/bell-ring.svg" alt="" /></h1>
-  <button id="sync-now">Jetzt synchronisieren</button>
+  <button id="sync-now"><img src="../../icons/refresh-ccw.svg" alt="" /> Synchronisieren</button>
 
   <!-- missed notifications (seen -> filse) -->
   <h2>Verpasste Benachrichtigungen</h2>

@@ -41,8 +41,14 @@
 
   "browser_specific_settings": {
     "gecko": {
-      "id": "github-notifications@example.local",
-      "strict_min_version": "112.0"
+      "id": "github-notifications@16u.dev",
+      "strict_min_version": "140.0",
+      "data_collection_permissions": {
+        "required": ["authenticationInfo"]
+      }
+    },
+    "gecko_android": {
+      "strict_min_version": "142.0"
     }
   }
 }
