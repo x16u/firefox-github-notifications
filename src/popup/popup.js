@@ -1,4 +1,4 @@
-import { getValue } from "../lib/storage.js";
+import { getValue, setValue } from "../lib/storage.js";
 
 const notificationList = document.getElementById("notification-list");
 const popedUp = await getValue("popedUpIds", []);
@@ -31,11 +31,6 @@ for (const id of missedNotifications) {
     listItemURL.appendChild(listItemTitle);
     listItemURL.appendChild(listItemBody);
 
-    listItem.addEventListener("click", async () => {
-        await browser.runtime.sendMessage({ type: "notification-clicked", id });
-        window.close();
-    });
-
     listItemURL.addEventListener("click", async (event) => {
         event.preventDefault();
 
@@ -45,6 +40,10 @@ for (const id of missedNotifications) {
             url: url,
             cookieStoreId: githubBrowserTabs[0]?.cookieStoreId,
         });
+
+        seen.push(id);
+        await setValue("seenIds", seen);
+        await browser.runtime.sendMessage({ type: "notification-clicked", id });
 
         window.close();
     });
