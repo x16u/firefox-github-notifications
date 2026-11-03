@@ -1,4 +1,4 @@
-import { getSettings, getValue, setValue } from "./lib/storage.js";
+import { getSettings, getValue, setValue, removeValue } from "./lib/storage.js";
 import { showNotification, onNotificationClicked } from "./lib/notifications.js";
 import { fetchNewNotifications, handleNotificationClick, markAsSeen, markAsPopedUp } from "./main.js";
 
@@ -22,9 +22,9 @@ async function pollAndNotify() {
     for (const item of items) {
         if (seen.includes(item.id) || popedUp.includes(item.id)) continue;
 
-        let url = item.url.replace("api.github.com/repos", "github.com")
+        let url = item.url?.replace("api.github.com/repos", "github.com")
             .replace("/pulls/", "/pull/")
-            .replace("/issues/", "/issues/");
+            .replace("/issues/", "/issues/") || item.url;
 
         await setValue(`notification:${item.id}`, {
             title: item.title,
@@ -39,6 +39,16 @@ async function pollAndNotify() {
         });
 
         await markAsPopedUp(item.id);
+    }
+
+    const stillUnreadIds = new Set(items.map((item) => item.id));
+    const readIds = popedUp.filter((id) => !stillUnreadIds.has(id));
+    for (const id of readIds) {
+        await removeValue(`notification:${id}`);
+    }
+    if (readIds.length > 0) {
+        await setValue("popedUpIds", popedUp.filter((id) => stillUnreadIds.has(id)));
+        await setValue("seenIds", seen.filter((id) => stillUnreadIds.has(id)));
     }
 }
 
@@ -70,7 +80,14 @@ onNotificationClicked(async (notificationId) => {
 });
 
 browser.runtime.onMessage.addListener((message) => {
-    if (message?.type === "check-now") {
+    if (message?.type === "sync-now") {
         return pollAndNotify();
+    }
+
+    if (message?.type === "notification-clicked") {
+        return Promise.all([
+            markAsSeen(message.id),
+            handleNotificationClick(message.id),
+        ]);
     }
 });

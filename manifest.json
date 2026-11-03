@@ -4,9 +4,9 @@
   "version": "0.1.0",
   "description": "shows GitHub notifications in the browser toolbar and sends desktop notifications when new notifications arrive",
   "icons": {
-    "48": "icons/icon-48.png",
-    "96": "icons/icon-96.png",
-    "128": "icons/icon-128.png"
+    "48": "icons/bell-ring.svg",
+    "96": "icons/bell-ring.svg",
+    "128": "icons/bell-ring.svg"
   },
 
   "permissions": [
@@ -29,8 +29,8 @@
     "default_title": "GitHub Notifications",
     "default_popup": "src/popup/popup.html",
     "default_icon": {
-      "48": "icons/icon-48.png",
-      "96": "icons/icon-96.png"
+      "48": "icons/bell-ring.svg",
+      "96": "icons/bell-ring.svg"
     }
   },
 

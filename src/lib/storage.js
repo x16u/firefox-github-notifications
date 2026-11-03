@@ -21,3 +21,8 @@ export async function getValue(key, fallback = undefined) {
 export async function setValue(key, value) {
     await browser.storage.local.set({ [key]: value });
 }
+
+export async function removeValue(key) {
+    await browser.storage.local.remove(key);
+}
+

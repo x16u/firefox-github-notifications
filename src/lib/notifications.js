@@ -5,7 +5,7 @@ export async function showNotification({ id, title, message, iconUrl } = {}) {
 
     await browser.notifications.create(notificationId, {
         type: "basic",
-        iconUrl: browser.runtime.getURL(iconUrl ?? "icons/icon-96.png"),
+        iconUrl: browser.runtime.getURL(iconUrl ?? "icons/bell-ring.svg"),
         title,
         message,
     });

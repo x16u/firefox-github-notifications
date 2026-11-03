@@ -1,12 +1,9 @@
-import { getValue, setValue } from "../lib/storage.js";
+import { getValue } from "../lib/storage.js";
 
 const notificationList = document.getElementById("notification-list");
 const popedUp = await getValue("popedUpIds", []);
 const seen = await getValue("seenIds", []);
 const missedNotifications = popedUp.filter((id) => !seen.includes(id));
-
-// wir brauchen die cookie id, sonst 404...
-const githubBrowserTabs = await browser.tabs.query({ url: "https://github.com/*" });
 
 for (const id of missedNotifications) {
     const notification = await getValue(`notification:${id}`);
@@ -34,15 +31,6 @@ for (const id of missedNotifications) {
     listItemURL.addEventListener("click", async (event) => {
         event.preventDefault();
 
-        const url = event.currentTarget.getAttribute("data-href");
-
-        if (url) await browser.tabs.create({
-            url: url,
-            cookieStoreId: githubBrowserTabs[0]?.cookieStoreId,
-        });
-
-        seen.push(id);
-        await setValue("seenIds", seen);
         await browser.runtime.sendMessage({ type: "notification-clicked", id });
 
         window.close();
@@ -52,7 +40,7 @@ for (const id of missedNotifications) {
     notificationList.appendChild(listItem);
 }
 
-document.getElementById("check-now").addEventListener("click", async () => {
-    await browser.runtime.sendMessage({ type: "check-now" });
+document.getElementById("sync-now").addEventListener("click", async () => {
+    await browser.runtime.sendMessage({ type: "sync-now" });
     window.close();
 });

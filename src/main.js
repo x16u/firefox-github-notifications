@@ -24,7 +24,7 @@ export async function handleNotificationClick(notificationId) {
 
     // wir brauchen die cookie id, sonst 404...
     const githubBrowserTabs = await browser.tabs.query({ url: "https://github.com/*" });
-    if (url) await browser.tabs.create({
+    if (notification?.url) await browser.tabs.create({
         url: notification.url,
         cookieStoreId: githubBrowserTabs[0]?.cookieStoreId,
     });
