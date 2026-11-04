@@ -22,7 +22,7 @@
 
 The add-on stays loaded until Firefox is restarted.
 
-Then set your GitHub Access Token and poll interval in the add-on's options page.
+Then set your GitHub Access Token (classic) and poll interval in the add-on's options page.
 
 ## Known limitations
 
