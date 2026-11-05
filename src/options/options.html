@@ -4,9 +4,26 @@
   <meta charset="utf-8" />
   <title>Einstellungen</title>
   <style>
-    body { font: 14px sans-serif; padding: 16px; max-width: 400px; }
+    :root {
+      color-scheme: light dark;
+      --bg: #ffffff;
+      --fg: #1f2328;
+      --muted: #57606a;
+      --border: #d0d7de;
+      --input-bg: #ffffff;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0d1117;
+        --fg: #e6edf3;
+        --muted: #8b949e;
+        --border: #3d444d;
+        --input-bg: #161b22;
+      }
+    }
+    body { font: 14px sans-serif; padding: 16px; max-width: 400px; color: var(--fg); background: var(--bg); }
     label { display: block; margin-top: 10px; }
-    input { width: 100%; box-sizing: border-box; padding: 4px; }
+    input { width: 100%; box-sizing: border-box; padding: 4px; background: var(--input-bg); color: var(--fg); border: 1px solid var(--border); }
     button { margin-top: 14px; padding: 6px 12px; }
   </style>
 </head>

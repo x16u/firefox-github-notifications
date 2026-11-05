@@ -4,28 +4,151 @@
   <meta charset="utf-8" />
   <title>GitHub Notifications</title>
   <style>
-    body { font: 14px sans-serif; width: 420px; padding: 10px; }
-    button { width: 100%; padding: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; }
-    button img { width: 16px; height: 16px; }
-    h1,h2 { color: #555; }
-    h1 { font-size: 18px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; }
-    h1 img { width: 20px; height: 20px; }
-    h2 { font-size: 16px; margin-top: 20px; }
-    ul { list-style: none; padding: 10px 0; margin: 0; }
-    li { margin-bottom: 5px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-    a { text-decoration: none; color: #000; flex: 1; min-width: 0; }
-    a:hover { text-decoration: underline; }
-    .notification-item-mark-seen { width: auto; padding: 4px; background: none; border: none; flex-shrink: 0; }
-    .notification-item-mark-seen img { width: 18px; height: 18px; display: block; }
+    * { box-sizing: border-box; }
+    :root {
+      color-scheme: light dark;
+      --bg: #ffffff;
+      --fg: #1f2328;
+      --muted: #57606a;
+      --border: #e1e4e8;
+      --border-strong: #d0d7de;
+      --hover: #f6f8fa;
+      --button-bg: #f6f8fa;
+      --button-hover: #eef1f4;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0d1117;
+        --fg: #e6edf3;
+        --muted: #8b949e;
+        --border: #30363d;
+        --border-strong: #3d444d;
+        --hover: #161b22;
+        --button-bg: #21262d;
+        --button-hover: #30363d;
+      }
+      .brand img, #sync-now img, .notification-item-mark-seen img {
+        filter: invert(1);
+      }
+    }
+    body {
+      font: 13px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      width: 360px;
+      margin: 0;
+      color: var(--fg);
+      background: var(--bg);
+    }
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .brand img { width: 18px; height: 18px; }
+
+    #sync-now {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 10px;
+      border: 1px solid var(--border-strong);
+      background: var(--button-bg);
+      border-radius: 6px;
+      font-size: 12px;
+      color: var(--fg);
+      cursor: pointer;
+    }
+    #sync-now:hover { background: var(--button-hover); }
+    #sync-now img { width: 14px; height: 14px; }
+    #sync-now.syncing { opacity: .7; cursor: default; }
+    #sync-now.syncing img { animation: spin .8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    section { padding: 10px 14px 14px; }
+    h2 {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      color: var(--muted);
+      margin: 0 0 8px;
+      font-weight: 600;
+    }
+    ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+    li {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 10px;
+      transition: background .12s ease, border-color .12s ease;
+    }
+    li:hover { background: var(--hover); border-color: var(--border-strong); }
+    a {
+      text-decoration: none;
+      color: inherit;
+      flex: 1;
+      min-width: 0;
+      display: block;
+    }
+    .notification-item-title {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .notification-item-body {
+      font-size: 12px;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .notification-item-mark-seen {
+      flex-shrink: 0;
+      width: 26px;
+      height: 26px;
+      padding: 0;
+      border: none;
+      background: transparent;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .notification-item-mark-seen:hover { background: var(--button-hover); }
+    .notification-item-mark-seen img { width: 16px; height: 16px; }
+
+    .empty-state {
+      text-align: center;
+      color: var(--muted);
+      padding: 18px 10px;
+      font-size: 12px;
+    }
   </style>
 </head>
 <body>
-  <h1>GitHub Notifications <img src="../../icons/bell-ring.svg" alt="" /></h1>
-  <button id="sync-now"><img src="../../icons/refresh-ccw.svg" alt="" /> Synchronisieren</button>
+  <header>
+    <span class="brand"><img src="../../icons/bell-ring.svg" alt="" /> GitHub Notifications</span>
+    <button id="sync-now" type="button"><img src="../../icons/refresh-ccw.svg" alt="" /> Synchronisieren</button>
+  </header>
 
-  <!-- missed notifications (seen -> filse) -->
-  <h2>Verpasste Benachrichtigungen</h2>
-  <ul id="notification-list"></ul>
+  <section>
+    <h2>Verpasste Benachrichtigungen</h2>
+    <ul id="notification-list"></ul>
+  </section>
+
   <script src="popup.js" type="module"></script>
 </body>
 </html>
