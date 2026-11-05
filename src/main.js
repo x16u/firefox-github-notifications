@@ -39,6 +39,17 @@ export async function markAsSeen(id) {
     if (!seen.includes(id)) {
         seen.push(id);
         await setValue("seenIds", seen);
+        const response = await fetch("https://api.github.com/notifications/threads/" + id, {
+            method: "PATCH",
+            headers: {
+                'X-GitHub-Api-Version': '2026-03-10',
+                'Authorization': `Bearer ${(await getSettings()).githubAccesToken}`,
+            },
+        });
+
+        if (!response.ok) {
+            console.error(`Failed to mark notification ${id} as seen: ${response.statusText}`);
+        }
     }
 }
 
