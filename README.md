@@ -1,6 +1,6 @@
 # GitHub Notifications (Firefox Add-on)
 
-> 🚧 **Status: WIP** – usable already, but still evolving and not yet feature-complete.
+> **Status: WIP** – usable already, but still evolving and not yet feature-complete.
 
 ## What it does
 
