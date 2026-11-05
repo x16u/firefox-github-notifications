@@ -13,9 +13,7 @@
     "storage",
     "alarms",
     "notifications",
-    "tabs",
-    "cookies",
-    "contextualIdentities"
+    "tabs"
   ],
 
   "host_permissions": ["*://github.com/*", "*://api.github.com/*"],
