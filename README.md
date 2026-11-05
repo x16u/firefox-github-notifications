@@ -11,7 +11,7 @@
 
 ## Requirements
 
-- Firefox ≥ 112
+- Firefox ≥ 140
 - A [GitHub Personal Access Token (classic)](https://github.com/settings/tokens) with access to `notifications`, to be entered in the add-on settings
 
 ## Usage (development)
