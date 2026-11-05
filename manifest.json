@@ -18,7 +18,7 @@
     "contextualIdentities"
   ],
 
-  "host_permissions": ["*://github.com/*"],
+  "host_permissions": ["*://github.com/*", "*://api.github.com/*"],
 
   "background": {
     "scripts": ["src/background.js"],
