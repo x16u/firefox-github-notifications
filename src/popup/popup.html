@@ -12,9 +12,11 @@
     h1 img { width: 20px; height: 20px; }
     h2 { font-size: 16px; margin-top: 20px; }
     ul { list-style: none; padding: 10px 0; margin: 0; }
-    li { margin-bottom: 5px; }
-    a { text-decoration: none; color: #000; }
+    li { margin-bottom: 5px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    a { text-decoration: none; color: #000; flex: 1; min-width: 0; }
     a:hover { text-decoration: underline; }
+    .notification-item-mark-seen { width: auto; padding: 4px; background: none; border: none; flex-shrink: 0; }
+    .notification-item-mark-seen img { width: 18px; height: 18px; display: block; }
   </style>
 </head>
 <body>

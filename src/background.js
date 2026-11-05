@@ -72,12 +72,14 @@ browser.storage.onChanged.addListener((changes, area) => {
     }
 });
 
-onNotificationClicked(async (notificationId) => {
+async function handleClickedNotification(notificationId) {
     await Promise.all([
         markAsSeen(notificationId),
         handleNotificationClick(notificationId),
     ]);
-});
+}
+
+onNotificationClicked(handleClickedNotification);
 
 browser.runtime.onMessage.addListener((message) => {
     if (message?.type === "sync-now") {
@@ -85,9 +87,10 @@ browser.runtime.onMessage.addListener((message) => {
     }
 
     if (message?.type === "notification-clicked") {
-        return Promise.all([
-            markAsSeen(message.id),
-            handleNotificationClick(message.id),
-        ]);
+        return handleClickedNotification(message.id);
+    }
+
+    if (message?.type === "mark-seen") {
+        return markAsSeen(message.id);
     }
 });

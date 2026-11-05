@@ -9,6 +9,10 @@ export async function fetchNewNotifications(settings) {
     });
     const items = await response.json();
 
+    if (response.status === 401) {
+        throw new Error("Unauthorized: Invalid GitHub access token.");
+    }
+
     return items
         .filter((item) => isNew(item))
         .map((item) => ({
